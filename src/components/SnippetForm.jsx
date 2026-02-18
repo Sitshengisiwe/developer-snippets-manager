@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function SnippetForm({ initialValues, onSubmit, submitLabel }) {
   // Form state values (no tags)
@@ -7,6 +7,17 @@ export default function SnippetForm({ initialValues, onSubmit, submitLabel }) {
     language: initialValues?.language || "",
     code: initialValues?.code || "",
   }));
+
+  // Controls the popup message
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupText, setPopupText] = useState("");
+  function triggerPopup(message) {
+    setPopupText(message);
+    setShowPopup(true);
+
+    // Hide after 5 seconds
+    setTimeout(() => setShowPopup(false), 5000);
+  }
 
   // Validate form fields
   const errors = useMemo(() => {
@@ -28,7 +39,11 @@ export default function SnippetForm({ initialValues, onSubmit, submitLabel }) {
   // Submit form
   function handleSubmit(e) {
     e.preventDefault();
-    if (!isValid) return;
+    // If invalid, show popup + stop
+    if (!isValid) {
+      triggerPopup("Please fill in all required fields.");
+      return;
+    }
 
     // Send clean data back to parent page
     onSubmit({
@@ -40,6 +55,19 @@ export default function SnippetForm({ initialValues, onSubmit, submitLabel }) {
 
   return (
     <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
+      {showPopup && (
+        <div
+          className="card"
+          style={{
+            borderColor: "rgba(239,68,68,.35)",
+            background: "rgba(239,68,68,.10)",
+            maxWidth: "100%",
+          }}
+        >
+          <strong style={{ fontSize: 14 }}>⚠️ {popupText}</strong>
+        </div>
+      )}
+
       {/* Title */}
       <div style={{ display: "grid", gap: 6 }}>
         <label className="muted">Title</label>
@@ -88,7 +116,7 @@ export default function SnippetForm({ initialValues, onSubmit, submitLabel }) {
 
       {/* Buttons row */}
       <div style={{ display: "flex", gap: 10 }}>
-        <button className="btn btnPrimary" type="submit" disabled={!isValid}>
+        <button className="btn btnPrimary" type="submit">
           {submitLabel || "Save"}
         </button>
       </div>
