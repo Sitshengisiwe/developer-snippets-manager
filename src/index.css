@@ -276,3 +276,77 @@ code {
     "Courier New", monospace;
   font-size: 18px;
 }
+
+/* Mobile responsiveness  */
+@media (max-width: 640px) {
+  /* Overall page padding */
+  .container {
+    padding: 14px 12px;
+  }
+
+  /* Navbar: stack brand and buttons */
+  .nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .navActions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Brand text: smaller and allow wrap */
+  .brandText {
+    font-size: 18px;
+    line-height: 1.15;
+  }
+
+  /* Headings: reduce size on mobile */
+  .h1 {
+    font-size: 34px;
+  }
+
+  .cardTitle {
+    font-size: 20px;
+  }
+
+  /* Filters: stack search and dropdown */
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  /* Cards should use full width on mobile */
+  .card {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  /* Card top: stack title and actions */
+  .cardTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* Buttons row inside cards */
+  .actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  /* Make buttons slightly smaller */
+  .btn {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  /* Code block: keep scroll but reduce padding */
+  .code {
+    padding: 10px;
+  }
+}

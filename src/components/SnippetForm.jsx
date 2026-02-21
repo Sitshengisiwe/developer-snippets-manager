@@ -56,14 +56,7 @@ export default function SnippetForm({ initialValues, onSubmit, submitLabel }) {
   return (
     <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
       {showPopup && (
-        <div
-          className="card"
-          style={{
-            borderColor: "rgba(239,68,68,.35)",
-            background: "rgba(239,68,68,.10)",
-            maxWidth: "100%",
-          }}
-        >
+        <div>
           <strong style={{ fontSize: 14 }}>⚠️ {popupText}</strong>
         </div>
       )}

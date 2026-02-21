@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SnippetForm from "../components/SnippetForm";
 import { loadSnippets, saveSnippets } from "../utils/localStorage";
 
@@ -11,6 +11,7 @@ export default function AddSnippet() {
 
   function handleCreate(data) {
     const now = Date.now();
+
     const newSnippet = {
       id: makeId(),
       ...data,
@@ -22,23 +23,27 @@ export default function AddSnippet() {
     const next = [newSnippet, ...current];
 
     saveSnippets(next);
-    navigate("/");
+
+    // Go back to dashboard after saving
+    navigate("/dashboard");
   }
 
   return (
-    <div style={{ padding: 10 }}>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h2>Add Snippet</h2>
-        <Link to="/">dashboard</Link>
+    <div>
+      {/* Header */}
+      <header className="pageHeader">
+        <h2 className="h2">Add Snippet</h2>
+
+        {/* Cancel button */}
+        <button className="btn" onClick={() => navigate("/dashboard")}>
+          Cancel
+        </button>
       </header>
 
-      <SnippetForm onSubmit={handleCreate} submitLabel="Create Snippet" />
+      {/* Form inside card */}
+      <div className="card">
+        <SnippetForm onSubmit={handleCreate} submitLabel="Create Snippet" />
+      </div>
     </div>
   );
 }
