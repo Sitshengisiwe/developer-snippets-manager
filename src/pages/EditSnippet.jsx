@@ -12,40 +12,49 @@ export default function EditSnippet() {
 
   function handleUpdate(data) {
     const now = Date.now();
+
     const next = snippets.map((s) =>
       s.id === id ? { ...s, ...data, updatedAt: now } : s,
     );
+
     saveSnippets(next);
-    navigate("/");
+
+    // After update go back to dashboard
+    navigate("/dashboard");
   }
 
+  // If snippet not found
   if (!snippet) {
     return (
-      <div style={{ padding: 20 }}>
-        <p>Snippet not found.</p>
-        <Link to="/">Back</Link>
+      <div className="card">
+        <h2 className="h2">Snippet not found</h2>
+        <Link className="btn" to="/dashboard">
+          Back to Dashboard
+        </Link>
       </div>
     );
   }
 
   return (
     <div>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h2>Edit Snippet</h2>
-        <Link to="/">dashboard</Link>
+      {/* Page header */}
+      <header className="pageHeader">
+        <h2 className="h2">Edit Snippet</h2>
+
+        {/* Proper back button */}
+        <Link className="btn" to="/dashboard">
+          ← Back
+        </Link>
       </header>
 
-      <SnippetForm
-        initialValues={snippet}
-        onSubmit={handleUpdate}
-        submitLabel="Update Snippet"
-      />
+      {/* Form wrapped in card for consistency */}
+      <div className="card">
+        <SnippetForm
+          initialValues={snippet}
+          onSubmit={handleUpdate}
+          submitLabel="Update Snippet"
+        />
+      </div>
     </div>
   );
 }

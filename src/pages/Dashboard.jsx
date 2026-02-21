@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { loadSnippets, saveSnippets } from "../utils/localStorage";
 import SnippetCard from "../components/SnippetCard";
 import SearchBar from "../components/SearchBar";
@@ -9,18 +8,15 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("All");
 
-  // Load snippets when dashboard opens
   useEffect(() => {
     setSnippets(loadSnippets());
   }, []);
 
-  // Build list of languages (unique + sorted)
   const languages = useMemo(() => {
     const set = new Set(snippets.map((s) => s.language).filter(Boolean));
     return ["All", ...Array.from(set).sort()];
   }, [snippets]);
 
-  // Filter by search + selected language
   const filteredSnippets = useMemo(() => {
     const q = search.trim().toLowerCase();
 
@@ -38,7 +34,6 @@ export default function Dashboard() {
     });
   }, [snippets, search, selectedLanguage]);
 
-  // Delete snippet
   function handleDelete(id) {
     const ok = window.confirm("Delete this snippet?");
     if (!ok) return;
@@ -50,27 +45,20 @@ export default function Dashboard() {
 
   return (
     <div>
-      {/* Title + Add button row */}
+      {/* Title row */}
       <header className="pageHeader">
-        <h2 className="h1">Dashboard</h2>
-
-        {/* This is now styled like a button */}
-        <Link to="/add" className="btn btnPrimary">
-          + Add Snippet
-        </Link>
+        <h1 className="h1">Dashboard</h1>
       </header>
 
-      {/* Search + Language filter row */}
+      {/* Filters */}
       <div className="filters">
-        <div style={{ flex: 1 }}>
-          <SearchBar value={search} onChange={setSearch} />
-        </div>
+        {/* ✅ no wrapper div */}
+        <SearchBar value={search} onChange={setSearch} />
 
+        {/* ✅ no inline maxWidth */}
         <select
-          className="input"
           value={selectedLanguage}
           onChange={(e) => setSelectedLanguage(e.target.value)}
-          style={{ maxWidth: 220 }}
         >
           {languages.map((lang) => (
             <option key={lang} value={lang}>
@@ -80,11 +68,11 @@ export default function Dashboard() {
         </select>
       </div>
 
-      {/* Snippet list */}
+      {/* List */}
       {filteredSnippets.length === 0 ? (
         <p className="muted">No snippets found.</p>
       ) : (
-        <div style={{ display: "grid", gap: 12 }}>
+        <div className="snippetsGrid">
           {filteredSnippets.map((s) => (
             <SnippetCard key={s.id} snippet={s} onDelete={handleDelete} />
           ))}

@@ -5,50 +5,64 @@ export default function ViewSnippet() {
   const { id } = useParams();
   const snippet = loadSnippets().find((s) => s.id === id);
 
+  // If snippet doesn't exist (wrong id / deleted), show message
   if (!snippet) {
     return (
-      <div style={{ padding: 20 }}>
-        <p>Snippet not found.</p>
-        <Link to="/">Back</Link>
+      <div className="card">
+        <h2 className="h2">Snippet not found</h2>
+        <p className="muted">
+          It may have been deleted or the link is incorrect.
+        </p>
+        <Link className="btn" to="/dashboard">
+          Back to Dashboard
+        </Link>
       </div>
     );
   }
 
   async function copy() {
-    await navigator.clipboard.writeText(snippet.code);
-    alert("Copied!");
+    try {
+      await navigator.clipboard.writeText(snippet.code);
+      // If you prefer no alerts, we can change this to "Copied ✅" text like on cards
+      alert("Copied!");
+    } catch {
+      alert("Copy failed. Please copy manually.");
+    }
   }
 
   return (
     <div>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h2>{snippet.title}</h2>
-        <Link to="/">Back</Link>
+      {/* Page header */}
+      <header className="pageHeader">
+        <div>
+          <h2 className="h2">{snippet.title}</h2>
+          {/* ✅ language restored */}
+          <p className="muted" style={{ marginTop: 6 }}>
+            {snippet.language}
+          </p>
+        </div>
+
+        <Link className="btn" to="/dashboard">
+          Back
+        </Link>
       </header>
 
-      <p style={{ opacity: 0.8 }}>{snippet.language}</p>
+      {/* Content card */}
+      <div className="card">
+        <div className="actions" style={{ justifyContent: "flex-end" }}>
+          <Link className="btn" to={`/edit/${snippet.id}`}>
+            Edit
+          </Link>
 
-      <div style={{ display: "flex", gap: 10, margin: "12px 0" }}>
-        <Link to={`/edit/${snippet.id}`}>Edit</Link>
-        <button onClick={copy}>Copy code</button>
+          <button className="btn btnPrimary" onClick={copy}>
+            Copy code
+          </button>
+        </div>
+
+        <pre className="code">
+          <code>{snippet.code}</code>
+        </pre>
       </div>
-
-      <pre
-        style={{
-          background: "#000000",
-          padding: 12,
-          borderRadius: 10,
-          overflowX: "auto",
-        }}
-      >
-        <code>{snippet.code}</code>
-      </pre>
     </div>
   );
 }
